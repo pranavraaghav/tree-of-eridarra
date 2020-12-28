@@ -11,9 +11,20 @@ Tree of Eridarra is a discord bot that I custom built for my private discord ser
 ## How to use:
 You're gonna need to generate your own discord bot token in order to use this code as your own bot (instructions for which can be easily found online)
 
-Clone the code to your computer, then add bot token value to the main.py file under a variable named TOKEN. Run main.py and boom, you have a working bot. 
+Clone the code to your own repl.it, then create a .env file. In the .env file, add a variable named TOKEN and assign your bot's token to that variable. Any value stored under inside .env will be hidden from the public.
+
+**It should look something like this**:
+TOKEN= JfnDFKShFEHASFHDhSD.fdafLUhdshfds
+(I mashed my keys to get that value, don't bother trying to use that^)
+
+Run main.py and boom, you should have a working bot. 
 
 ## How I keep the bot running 24x7 
 I used repl.it to make this work. By default, repl.it will stop your code from running if you close the tab, however, while running servers it continues to run for up to 1 hour without any requests to the server. 
 keep_alive.py contains the code to start and run a flask server. The flask server is instantiated along with the discord bot in main.py. I use uptimerobot.com to ping the flask server every 5 
 minutes - this refreshes the 1 hour timeout on the entire session, thus keeping my discord bot alive until I manually stop it. 
+
+## Packages used
+1. discord.py - for accessing discord's API for bots
+2. replit - for using replit's databases
+3. flask - to deploy a flask server
