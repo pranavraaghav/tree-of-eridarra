@@ -1,6 +1,10 @@
 # Tree of Eridarra
 Tree of Eridarra is a discord bot that I custom built for my private discord server - Eridarra.
 
+## Features:
+1. Inspiring and motivating quotes upon command
+2. System where a user can start "working" for X minutes and bot will ask them to get back to work if they text within the next X minutes.
+
 ## Read this before you proceed:
 1. The code was written on **repl.it** which also handles the version control for this project. 
 2. The discord bot token has been hidden from the public by storing it in a .env file that can only be accessed during repl.it runtime
