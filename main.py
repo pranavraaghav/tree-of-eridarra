@@ -24,7 +24,7 @@ async def on_message(message):
         return
 
     # Avoiding other bot commands (saving computational resources)
-    if(message.content.startswith('-') or message.content.startswith('!')):
+    if(message.content.startswith(whitelisted) for whitelisted in work_phrases_whitelist):
         return
 
     if(message.content.startswith('tree')):
@@ -37,6 +37,7 @@ async def on_message(message):
             # Then redirect to a function at functions.py
             if(command == 'help'):
                 await message.channel.send(get_help(phrase))
+                return
             if(command == 'inspire'):
                 await message.channel.send(get_quote())
             if(command == 'bless'):

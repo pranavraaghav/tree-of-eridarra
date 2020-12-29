@@ -23,6 +23,15 @@ you_should_be_working_responses = [
     'The texts can wait, your future can\'t, back on track - now!'
 ]
 
+work_phrases_whitelist = [
+    '-p',
+    '!p',
+    '-r',
+    '!r',
+    '-dc',
+    '-stop',
+    '-loop'
+]
 working_users = {}
 
 
@@ -169,7 +178,10 @@ def show_working():
             elif(timeRemaining['seconds'] > 0):
                 seconds = timeRemaining['seconds']
                 timeString = timeString + f'{seconds} secs '
-            text = text + "\n{user} will be working for another {time}".format(user=user.name, time=timeString)
+            if(user.nick == None):
+                text = text + "\n{user} will be working for another {time}".format(user=user.name, time=timeString)
+            else:
+                text = text + "\n{user} will be working for another {time}".format(user=user.nick, time=timeString)
         return text
     return "No one is currently working"
 
