@@ -24,7 +24,8 @@ async def on_message(message):
         return
 
     # Avoiding other bot commands (saving computational resources)
-    if(message.content.startswith(whitelisted) for whitelisted in work_phrases_whitelist):
+    # Broke the bot, need to fixx
+    if(message.content.startswith('-') or message.content.startswith('!')):
         return
 
     if(message.content.startswith('tree')):
@@ -61,6 +62,13 @@ async def on_message(message):
                 except:
                     await message.channel.send('I am facing trouble adjusting my memory, sorry')
             if(command == 'startwork'):
+                if(phrase.split(' ', maxsplit=1)[1].strip().startswith('hardcore')):
+                    try:
+                        user, minutes = add_working_hardcore(message)
+                        await message.channel.send("{user} has started working and will continue to work for another {minutes} minutes".format(user=user.mention, minutes=minutes))
+                        return
+                    except:
+                        await message.channel.send('You can\'t finesse the HARDCORE mode.')
                 try:
                     user, minutes = add_working(message)
                     await message.channel.send("{user} has started working and will continue to work for another {minutes} minutes".format(user=user.mention, minutes=minutes))
@@ -86,11 +94,18 @@ async def on_message(message):
             await message.channel.send('Please use "tree help" for more info on commands')
 
     if(message.author in working_users):
-        if(check_working(message.author)):
+        if(check_working(message.author, working_users)):
             await message.channel.send(content="{main} {user}".format(main=you_should_be_working_responses[random.randrange(len(you_should_be_working_responses))], user=message.author.mention))
+            return
         else:
             del working_users[message.author]
-
+    elif(message.author in working_users_hardcore):
+        if(check_working(message.author, working_users_hardcore)):
+            await message.delete()
+            return
+        else:
+            del working_users_hardcore[message.author]
+    
     if(any(word in message.content.lower() for word in negative_phrases)):
         encouragement = get_encouragement()
         await message.channel.send(content=encouragement)

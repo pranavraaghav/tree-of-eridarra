@@ -33,7 +33,7 @@ work_phrases_whitelist = [
     '-loop'
 ]
 working_users = {}
-
+working_users_hardcore = {}
 
 def init():
     # Initializing encouragments dataset
@@ -132,16 +132,26 @@ def add_encouragements(phrase):
 def add_working(message):
     user = message.author
     phrase = message.content.split(' ', 1)[1]
-    minutes = int(phrase.split(' ', 1)[1])
+    minutes = float(phrase.split(' ', 1)[1])
     currentTime = datetime.now()
     endTime = currentTime + timedelta(minutes=minutes)
     working_users[user] = endTime
     return user, minutes
 
+def add_working_hardcore(message):
+    
+    if(message.author in working_users_hardcore):
+        return
+    user = message.author
+    minutes = float(message.content.split(' ')[3])
+    currentTime = datetime.now()
+    endTime = currentTime + timedelta(minutes=minutes)
+    working_users_hardcore[user] = endTime
+    return user, minutes
 
 # Checking if user should still be working
-def check_working(user):
-    endTime = working_users[user]
+def check_working(user, bracket):
+    endTime = bracket[user]
     if (datetime.now() < endTime):
         return True
     return False
