@@ -39,21 +39,38 @@ async def on_message(message):
             if(command == 'help'):
                 await message.channel.send(get_help(phrase))
                 return
+            
+
             if(command == 'inspire'):
                 await message.channel.send(get_quote())
+                return
+
+
             if(command == 'bless'):
                 await message.channel.send(get_blessing(message))
+                return
+
+
             if(command == 'advice'):
                 await message.channel.send(get_advice())
+                return
+
+
             if(command == 'show-en'):
                 await message.channel.send(get_encouragements())
+                return
+
+
             if(command == 'del-en'):
                 try:
-                    index = int(phrase.split(' ', maxsplit=1)[1].strip())
-                    del_encouragements(index)
+                    del_encouragements(int(phrase.split(' ', maxsplit=1)[1].strip()))
                     await message.channel.send('Phrase has been removed from the list of encouragements')
                 except:
                     await message.channel.send('I am facing trouble adjusting my memory, sorry')
+                finally:
+                    return
+
+            
             if(command == 'add-en'):
                 try:
                     phraseToAdd = phrase.split(' ', maxsplit=1)[1]
@@ -61,6 +78,10 @@ async def on_message(message):
                     await message.channel.send('"{added}"\thas been added to the list of encouragements'.format(added=phraseToAdd))
                 except:
                     await message.channel.send('I am facing trouble adjusting my memory, sorry')
+                finally:
+                    return
+
+
             if(command == 'startwork'):
                 if(phrase.split(' ', maxsplit=1)[1].strip().startswith('hardcore')):
                     try:
@@ -75,6 +96,10 @@ async def on_message(message):
                     return
                 except:
                     await message.channel.send('Kindly check if you have used the command properly (refer to "tree help")')
+                finally:
+                    return
+                
+                
             # UNDER CONSTRUCTION
             if(command == 'seework'):
                 try:
