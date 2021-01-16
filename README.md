@@ -7,19 +7,20 @@ Tree of Eridarra is a discord bot that I custom built for my private discord ser
 
 ## Read this before you proceed:
 You need to provide your own bot's token in order for this program to work. 
-Create a folder named ".env" and add this line: 
-TOKEN=<your-bot-token>
+Create a folder named ".env" and add this line:
 
-**note:** Do not enclose bot token under within quotes. 
+TOKEN= your-bot-token
+
+**NOTE:**  Do not enclose bot token under within quotes. 
 
 **It should look something like this**:
+
 TOKEN= JfnDFKShFEHASFHDhSD.fdafLUhdshfds
-(I mashed my keys to get that value, don't bother trying to use that^)
 
 Run main.py and you should have a working bot. 
 
 ## How I keep the bot running 24x7 
-I run this bot locally at home on my raspberry pi 4 B. 
+I run this bot locally on a raspberry pi 4 B. 
 
 ## Packages used
 1. discord.py - accessing discord's API for bots
