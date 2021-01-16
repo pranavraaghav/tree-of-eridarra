@@ -1,7 +1,6 @@
 import requests
 import json
 import random
-from replit import db
 from datetime import datetime, timedelta
 
 # Word lists
@@ -34,14 +33,6 @@ work_phrases_whitelist = [
 ]
 working_users = {}
 working_users_hardcore = {}
-
-def init():
-    # Initializing encouragments dataset
-    global encouragements
-    if ('encouragements' in db.keys()):
-        encouragements = db['encouragements']
-    else:
-        db['encouragements'] = encouragements
 
 # Input should be of type - timdelta
 def formatTimeDelta(delta):
@@ -100,7 +91,7 @@ def get_advice():
     jsonData = json.loads(response.text)
     return jsonData['slip']['advice']
 
-
+# Need to rewrite using new DB
 # Fetches a list of encouragements from the database
 def get_encouragements():
     text = '__**List of encouragements**__'
@@ -111,7 +102,7 @@ def get_encouragements():
         index += 1
     return text
 
-
+# Need to rewrite using new DB
 # Deletes an entry from the database and updates the database
 def del_encouragements(num):
     encouragements = db['encouragements']
@@ -121,7 +112,7 @@ def del_encouragements(num):
         print('cannot delete, think out of index')
     db['encouragements'] = encouragements
 
-
+# Need to rewrite using new DB
 # Adding an encouragement
 def add_encouragements(phrase):
     encouragements.append(phrase)

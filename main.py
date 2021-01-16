@@ -3,18 +3,13 @@ import random
 import os
 from datetime import datetime, timedelta
 
-from replit import db
 from functions import *
-from keep_alive import keep_alive
-
 
 client = discord.Client()
-init()
-
 
 @client.event
 async def on_ready():
-    print('The Tree of Eridarra is now alive, rejoice! ')
+    print('The Tree of Eridarra is now live on linux, rejoice! ')
     print('Welcome,', client.user)
 
 
@@ -55,32 +50,30 @@ async def on_message(message):
                 await message.channel.send(get_advice())
                 return
 
+            # if(command == 'show-en'):
+            #     await message.channel.send(get_encouragements())
+            #     return
 
-            if(command == 'show-en'):
-                await message.channel.send(get_encouragements())
-                return
 
-
-            if(command == 'del-en'):
-                try:
-                    del_encouragements(int(phrase.split(' ', maxsplit=1)[1].strip()))
-                    await message.channel.send('Phrase has been removed from the list of encouragements')
-                except:
-                    await message.channel.send('I am facing trouble adjusting my memory, sorry')
-                finally:
-                    return
+            # if(command == 'del-en'):
+            #     try:
+            #         del_encouragements(int(phrase.split(' ', maxsplit=1)[1].strip()))
+            #         await message.channel.send('Phrase has been removed from the list of encouragements')
+            #     except:
+            #         await message.channel.send('I am facing trouble adjusting my memory, sorry')
+            #     finally:
+            #         return
 
             
-            if(command == 'add-en'):
-                try:
-                    phraseToAdd = phrase.split(' ', maxsplit=1)[1]
-                    add_encouragements(phraseToAdd)
-                    await message.channel.send('"{added}"\thas been added to the list of encouragements'.format(added=phraseToAdd))
-                except:
-                    await message.channel.send('I am facing trouble adjusting my memory, sorry')
-                finally:
-                    return
-
+            # if(command == 'add-en'):
+            #     try:
+            #         phraseToAdd = phrase.split(' ', maxsplit=1)[1]
+            #         add_encouragements(phraseToAdd)
+            #         await message.channel.send('"{added}"\thas been added to the list of encouragements'.format(added=phraseToAdd))
+            #     except:
+            #         await message.channel.send('I am facing trouble adjusting my memory, sorry')
+            #     finally:
+            #         return
 
             if(command == 'startwork'):
                 if(phrase.split(' ', maxsplit=1)[1].strip().startswith('hardcore')):
@@ -131,10 +124,10 @@ async def on_message(message):
         else:
             del working_users_hardcore[message.author]
     
-    if(any(word in message.content.lower() for word in negative_phrases)):
-        encouragement = get_encouragement()
-        await message.channel.send(content=encouragement)
-        return
+    # if(any(word in message.content.lower() for word in negative_phrases)):
+    #     encouragement = get_encouragement()
+    #     await message.channel.send(content=encouragement)
+    #     return
 
-keep_alive()
-client.run(os.getenv('TOKEN'))
+TOKEN = 'NzkyNDAyNjQ0MzUwMDA5Mzc0.X-dMeA.drO37NgaZvNcDyvGz3GEYnpT1Ss'
+client.run(TOKEN)
