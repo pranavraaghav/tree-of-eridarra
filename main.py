@@ -1,7 +1,11 @@
+import os
 import discord
 import random
 import os
 from datetime import datetime, timedelta
+
+from dotenv import load_dotenv
+load_dotenv()
 
 from functions import *
 
@@ -129,5 +133,5 @@ async def on_message(message):
     #     await message.channel.send(content=encouragement)
     #     return
 
-TOKEN = 'NzkyNDAyNjQ0MzUwMDA5Mzc0.X-dMeA.drO37NgaZvNcDyvGz3GEYnpT1Ss'
+TOKEN = os.getenv("TOKEN")
 client.run(TOKEN)
