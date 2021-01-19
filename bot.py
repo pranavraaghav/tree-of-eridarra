@@ -13,8 +13,7 @@ bot = commands.Bot(command_prefix="tree ")
 # EVENTS
 @bot.event
 async def on_ready():
-    print('The Tree of Eridarra is now live on linux, rejoice! ')
-    print('Welcome,', bot.user)
+    print('The Tree of Eridarra is now live, rejoice!\n')
 
 @bot.event
 async def on_message(message):
@@ -34,11 +33,16 @@ async def on_message(message):
     await bot.process_commands(message)
 
 # COMMANDS
-@bot.command()
+@bot.command(
+    brief="say hi!"
+)
 async def hi(ctx):
-    await ctx.send('Hello {user}'.format(user=ctx.author.mention))
+    greetings= ['hi', 'hello', 'bonjour', 'hola']
+    await ctx.send('{greeting} {user}'.format(greeting=random.choice(greetings),user=ctx.author.mention))
 
-@bot.command()
+@bot.command(
+    brief='get an inspiration'
+)
 async def inspire(ctx):
     await ctx.send(get_quote())
 
@@ -46,7 +50,6 @@ async def inspire(ctx):
     brief='bless another user',
     help=
     """
-    To bless another person, do:
         tree bless @user
     """
 )
