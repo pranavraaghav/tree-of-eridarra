@@ -1,15 +1,18 @@
 import requests
 import json
 import random
+import db
 from datetime import datetime, timedelta
 
 # Word lists
 negative_phrases = ['sad', 'upset', 'depressed', 'depression']
 
-encouragements = [
-    'Hang in there, champ!', 'Things will get better soon',
+list_of_encouragements = [
+    'Hang in there, champ!', 
+    'Things will get better soon',
     'Our lives are a wise balance of good and bad, such is the way of life.',
-    'Don\'t you worry child, this too shall pass', 'This too shall pass'
+    'Don\'t you worry child, this too shall pass', 
+    'This too shall pass'
 ]
 
 you_should_be_working_responses = [
@@ -34,6 +37,8 @@ work_phrases_whitelist = [
 working_users = {}
 working_users_hardcore = {}
 
+
+
 # Input should be of type - timdelta
 def formatTimeDelta(delta):
     times = {}
@@ -51,34 +56,15 @@ def formatTimeDelta(delta):
         # Seconds tends to break at times, I do not understand why
     return times
 
-
-def get_encouragement():
-    phrase = encouragements[random.randrange(len(encouragements))]
-    return phrase
-
-
 def get_quote():
     response = requests.get('https://zenquotes.io/api/random')
     jsonData = json.loads(response.text)
     quote = jsonData[0]['q']
     return quote
 
-
-def get_help(phrase):
-    try:
-        if (phrase.split(' ', maxsplit=1)[1] == 'pro'):
-            details = '''__***Pro commands:***__\n```\nshow-en\nadd-en <Phrase>\ndel-en <Index>```'''
-            return details
-    except:
-        details = '''__***Here is what I can do for you, child:***__\n```\ninspire\nbless <user>(optional)\nadvice\n\nstartwork <minutes>\nstopwork\nseework```'''
-        return details
-
-
 def get_blessing(message):
     if (message.mentions):
         mentions = message.mentions
-        blessing = 'May the gods shine fortune upon you today, {user}'.format(
-            user=mentions[0].mention)
         return blessing
 
     blessing = 'May the gods shine fortune upon you today, {user}'.format(
@@ -91,43 +77,30 @@ def get_advice():
     jsonData = json.loads(response.text)
     return jsonData['slip']['advice']
 
-# Need to rewrite using new DB
-# Fetches a list of encouragements from the database
-def get_encouragements():
-    text = '__**List of encouragements**__'
-    index = 0
-    encouragements = db['encouragements']
-    for phrase in encouragements:
-        text = text + '\n{index}. {phrase}'.format(index=index, phrase=phrase)
-        index += 1
-    return text
-
-# Need to rewrite using new DB
-# Deletes an entry from the database and updates the database
-def del_encouragements(num):
-    encouragements = db['encouragements']
-    try:
-        encouragements.pop(num)
-    except:
-        print('cannot delete, think out of index')
-    db['encouragements'] = encouragements
-
-# Need to rewrite using new DB
 # Adding an encouragement
-def add_encouragements(phrase):
-    encouragements.append(phrase)
-    db['encouragements'] = encouragements
+def add_encouragement(phrase):
+    item = db.Encouragement(phrase=phrase)
+    db.add(item)
 
+def delete_encouragement(phrases):
+    for phrase in phrases:
+        statement = db.Encouragement.__table__.delete().where(db.Encouragement.phrase == phrase)
+        db.engine.execute(statement)
+        # item = db.session.query(db.Encouragement).filter(db.Encouragement.phrase==phrase).first()
 
+def get_encouragements():
+    encouragements = db.get_all(db.Encouragement)
+    returnList = []
+    for encourage in encouragements:
+        returnList.append(encourage.phrase)
+    return returnList
+    
 # Adding user to working list
-def add_working(message):
-    user = message.author
-    phrase = message.content.split(' ', 1)[1]
-    minutes = float(phrase.split(' ', 1)[1])
+def add_working(user, time):
     currentTime = datetime.now()
-    endTime = currentTime + timedelta(minutes=minutes)
+    endTime = currentTime + timedelta(minutes=time)
     working_users[user] = endTime
-    return user, minutes
+    return True
 
 def add_working_hardcore(message):
     
@@ -185,4 +158,3 @@ def show_working():
                 text = text + "\n{user} will be working for another {time}".format(user=user.nick, time=timeString)
         return text
     return "No one is currently working"
-
