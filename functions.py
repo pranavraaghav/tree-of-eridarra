@@ -67,24 +67,24 @@ def get_advice():
     jsonData = json.loads(response.text)
     return jsonData['slip']['advice']
 
-def get_encouragements():
-    encouragements = db.get_all(db.Encouragement)
-    returnList = []
-    for encourage in encouragements:
-        returnList.append(encourage.phrase)
-    return returnList
-
-# Adding an encouragement
-def add_encouragement(phraseToAdd):
-    item = db.Encouragement(phrase=phraseToAdd)
+# Adds a phrase to corresponding table in DB
+def add_phrase(tableClass, phraseToAdd):
+    item = tableClass(phrase=phraseToAdd)
     db.add(item)
 
+def get_phrases(tableClass):
+    instances = db.get_all(tableClass)
+    returnList = []
+    for instance in instances:
+        returnList.append(instance.phrase)
+    return returnList
+
 # Takes a list of phrases
-# Removes each phrase from DB
-def delete_encouragements(indexesToBeDeleted):
-    db_phrases = get_encouragements()
+# Removes each phrase from corresponding table in DB
+def delete_phrases(tableClass, indexesToBeDeleted):
+    db_phrases = get_phrases(tableClass)
     for index in indexesToBeDeleted:
-        statement = db.Encouragement.__table__.delete().where(db.Encouragement.phrase == db_phrases[index-1])
+        statement = tableClass.__table__.delete().where(tableClass.phrase == db_phrases[int(index)-1])
         db.engine.execute(statement)
     
 # Adding user to working list
@@ -149,3 +149,12 @@ def show_working():
                 text = text + "\n{user} will be working for another {time}".format(user=user.nick, time=timeString)
         return text
     return "No one is currently working"
+
+def makeList(listOf, list):
+    # Provide the title of the list in   listOf
+    text = '__**List of {listOf}**__'.format(listOf=listOf)
+    index = 1
+    for phrase in list:
+        text = text + '\n{index}. {phrase}'.format(index=index, phrase=phrase)
+        index += 1
+    return text

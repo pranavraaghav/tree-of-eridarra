@@ -19,7 +19,7 @@ async def on_ready():
 async def on_message(message):
     # Checking for negative phrases
     if(any(word in message.content.lower() for word in negative_phrases)):
-        encouragement = random.choice(list_of_encouragements+get_encouragements())
+        encouragement = random.choice(list_of_encouragements+get_phrases(db.Encouragement))
         await message.channel.send(content=encouragement)
 
     # # Checking if user in working
@@ -83,26 +83,39 @@ async def encouragements(ctx, *args):
         for index in range(1, len(args)):
             # args=["hi", "hello"]
             phraseToAdd=args[index]
-            add_encouragement(phraseToAdd)
+            add_phrase(db.Encouragement, phraseToAdd)
             await ctx.send('"{added}"\thas been added to the list of encouragements'.format(added=phraseToAdd))
     elif option == "show":
         # 'show' lists custom encouragements from db in format
         #   1. encouragement1
         #   2. encouragement2
-        text = '__**List of encouragements**__'
-        index = 1
-        for phrase in get_encouragements():
-            text = text + '\n{index}. {phrase}'.format(index=index, phrase=phrase)
-            index += 1
-        await ctx.send(text)
+        await ctx.send(makeList('Encouragements', get_phrases(db.Encouragement)))
+
     elif option == "delete":
         # user deletes phrase(s) from db based on index numbers from 'show'
-        delete_encouragements(indexesToBeDeleted = args[1:])
-        await ctx.send("Deleted {indexes} phrases from DB".format(indexes=len(indexes)))
+        delete_phrases(db.Encouragement, indexesToBeDeleted = args[1:])
+        await ctx.send("Deleted {indexes} phrase(s) from DB".format(indexes=len(args[1:])))
     
-@bot.command()
-async def suggest(ctx, suggestion):
-    pass
+@bot.command(
+    name='suggest',
+    brief="Suggest improvements",
+    help=
+    """
+    Add a suggestion:
+    tree suggest add "<you suggestion here>"
+    
+    View all suggestions:
+    tree suggest view
+    """
+)
+async def suggest(ctx, *args):
+    option = args[0]
+    if option=='add':
+        # args[1] contains the suggestion
+        add_phrase(db.Suggestion, args[1])
+        await ctx.send("Thanks for your suggestion {user}!".format(user=ctx.author.mention))
+    elif option=='view':
+        await ctx.send(makeList('Suggestions', get_phrases(db.Suggestion)))
 
 # FUNCTIONS
 def printit():
