@@ -153,6 +153,9 @@ def show_working():
 def makeList(listOf, list):
     # Provide the title of the list in   listOf
     text = '__**List of {listOf}**__'.format(listOf=listOf)
+    if not list :
+        # TODO : replace with better message if req
+        return text + "\nNo entries exist!"
     index = 1
     for phrase in list:
         text = text + '\n{index}. {phrase}'.format(index=index, phrase=phrase)
