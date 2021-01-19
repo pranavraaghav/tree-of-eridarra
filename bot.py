@@ -18,7 +18,7 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     # Checking for negative phrases
-    if(any(word in message.content.lower() for word in negative_phrases)):
+    if(any(word in message.content.lower().split() for word in negative_phrases)):
         encouragement = random.choice(list_of_encouragements+get_phrases(db.Encouragement))
         await message.channel.send(content=encouragement)
 
