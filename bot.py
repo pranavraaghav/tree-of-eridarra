@@ -42,13 +42,22 @@ async def hi(ctx):
 async def inspire(ctx):
     await ctx.send(get_quote())
 
-@bot.command()
+@bot.command(
+    brief='bless another user',
+    help=
+    """
+    To bless another person, do:
+        tree bless @user
+    """
+)
 async def bless(ctx, *args):
     for user in args:
         blessing = 'May the gods shine fortune upon you today, {user}'.format(user=user)
         await ctx.send(blessing)
 
-@bot.command()
+@bot.command(
+    brief="get some advice"
+)
 async def advice(ctx):
     await ctx.send(get_advice())
 
@@ -57,9 +66,9 @@ async def advice(ctx):
     brief='add, show & delete custom encouragements',
     help=
     """
-    add - tree encouragements add "A" "B"
+    add    - tree encouragements add "A" "B"
             adds "A" and "B" to the custom list of encouragements
-    show - tree encouragements show
+    show   - tree encouragements show
             shows a list of encouragements with indexes
     delete - tree encouragements delete 1 4 2
             delete encouragements based on index from "show" command
@@ -70,7 +79,8 @@ async def encouragements(ctx, *args):
     if option == "add":
         for index in range(1, len(args)):
             # args=["hi", "hello"]
-            add_encouragement(phraseToAdd=args[index])
+            phraseToAdd=args[index]
+            add_encouragement(phraseToAdd)
             await ctx.send('"{added}"\thas been added to the list of encouragements'.format(added=phraseToAdd))
     elif option == "show":
         # 'show' lists custom encouragements from db in format
