@@ -52,31 +52,41 @@ async def bless(ctx, *args):
 async def advice(ctx):
     await ctx.send(get_advice())
 
-@bot.command()
+@bot.command(
+    name='encouragements',
+    brief='add, show & delete custom encouragements',
+    help=
+    """
+    add - tree encouragements add "A" "B"
+            adds "A" and "B" to the custom list of encouragements
+    show - tree encouragements show
+            shows a list of encouragements with indexes
+    delete - tree encouragements delete 1 4 2
+            delete encouragements based on index from "show" command
+    """
+)
 async def encouragements(ctx, *args):
-    if(args[0]=="add"):
+    option = args[0]
+    if option == "add":
         for index in range(1, len(args)):
-            phraseToAdd=args[index]
-            add_encouragement(phrase=phraseToAdd)
+            # args=["hi", "hello"]
+            add_encouragement(phraseToAdd=args[index])
             await ctx.send('"{added}"\thas been added to the list of encouragements'.format(added=phraseToAdd))
-    if(args[0]=="delete"):
-        phrases = []
-        db_phrases = get_encouragements()
-        args = args[1:]
-        for index in args:
-            # -1 because the user gives position, not index of phrase
-            index = int(index)-1
-            phrases.append(db_phrases[index])
-        delete_encouragement(phrases=phrases)
-        await ctx.send("Deleted {argcount} phrases from DB".format(argcount=len(args)))
-    if(args[0]=="show"):
+    elif option == "show":
+        # 'show' lists custom encouragements from db in format
+        #   1. encouragement1
+        #   2. encouragement2
         text = '__**List of encouragements**__'
         index = 1
-        db_encouragements = get_encouragements()
-        for phrase in db_encouragements:
+        for phrase in get_encouragements():
             text = text + '\n{index}. {phrase}'.format(index=index, phrase=phrase)
             index += 1
         await ctx.send(text)
+    elif option == "delete":
+        # user deletes phrase(s) from db based on index numbers from 'show'
+        delete_encouragements(indexesToBeDeleted = args[1:])
+        await ctx.send("Deleted {indexes} phrases from DB".format(indexes=len(indexes)))
+    
 
 # @bot.command()
 # async def work(ctx, *args):

@@ -7,11 +7,11 @@ Tree of Eridarra is a discord bot that I custom built for my private discord ser
 
 ## Read this before you proceed:
 You need to provide your own bot's token in order for this program to work. 
-Create a folder named ".env" and add this line:
+Create a file named ".env" and add this line:
 
 TOKEN= your-bot-token
 
-**NOTE:**  Do not enclose bot token under within quotes. 
+**NOTE:**  Do not enclose bot token within quotes. 
 
 **It should look something like this**:
 

@@ -62,31 +62,10 @@ def get_quote():
     quote = jsonData[0]['q']
     return quote
 
-def get_blessing(message):
-    if (message.mentions):
-        mentions = message.mentions
-        return blessing
-
-    blessing = 'May the gods shine fortune upon you today, {user}'.format(
-        user=message.author.mention)
-    return blessing
-
-
 def get_advice():
     response = requests.get('https://api.adviceslip.com/advice')
     jsonData = json.loads(response.text)
     return jsonData['slip']['advice']
-
-# Adding an encouragement
-def add_encouragement(phrase):
-    item = db.Encouragement(phrase=phrase)
-    db.add(item)
-
-def delete_encouragement(phrases):
-    for phrase in phrases:
-        statement = db.Encouragement.__table__.delete().where(db.Encouragement.phrase == phrase)
-        db.engine.execute(statement)
-        # item = db.session.query(db.Encouragement).filter(db.Encouragement.phrase==phrase).first()
 
 def get_encouragements():
     encouragements = db.get_all(db.Encouragement)
@@ -94,6 +73,19 @@ def get_encouragements():
     for encourage in encouragements:
         returnList.append(encourage.phrase)
     return returnList
+
+# Adding an encouragement
+def add_encouragement(phraseToAdd):
+    item = db.Encouragement(phrase=phraseToAdd)
+    db.add(item)
+
+# Takes a list of phrases
+# Removes each phrase from DB
+def delete_encouragements(indexesToBeDeleted):
+    db_phrases = get_encouragements()
+    for index in indexesToBeDeleted:
+        statement = db.Encouragement.__table__.delete().where(db.Encouragement.phrase == db_phrases[index-1])
+        db.engine.execute(statement)
     
 # Adding user to working list
 def add_working(user, time):
@@ -103,7 +95,6 @@ def add_working(user, time):
     return True
 
 def add_working_hardcore(message):
-    
     if(message.author in working_users_hardcore):
         return
     user = message.author

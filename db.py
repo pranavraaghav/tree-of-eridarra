@@ -23,7 +23,7 @@ Base.metadata.create_all(engine)
 
 # Operations
 def add(item):
-    session.add(item)
+    session.merge(item)
     session.commit()
 
 def delete(item):
@@ -33,10 +33,10 @@ def delete(item):
 def get_all(type):
     return session.query(type)
 
-# Testing
+## Testing
 # temp = Encouragement(phrase='Be good')
 # add(temp)
 
-# answer = session.query(Encouragement).all()
+# answer = session.query(type(temp)).all()
 # for x in answer:
 #     print(x.phrase)
