@@ -100,7 +100,13 @@ async def encouragements(ctx, *args):
         delete_encouragements(indexesToBeDeleted = args[1:])
         await ctx.send("Deleted {indexes} phrases from DB".format(indexes=len(indexes)))
     
+@bot.command()
+async def suggest(ctx, suggestion):
+    pass
 
+# FUNCTIONS
+def printit():
+    print('hello')
 # @bot.command()
 # async def work(ctx, *args):
 #     if(args[0]=='start'):
@@ -119,9 +125,6 @@ async def encouragements(ctx, *args):
 #         await ctx.send(show_working())
 #         return
 
-
-TOKEN = os.getenv("TOKEN")
-bot.run(TOKEN)
 
 #             if(command == 'startwork'):
 #                 if(phrase.split(' ', maxsplit=1)[1].strip().startswith('hardcore')):
@@ -165,4 +168,6 @@ bot.run(TOKEN)
 #             return
 #         else:
 #             del working_users_hardcore[message.author]
-    
+
+TOKEN = os.getenv("TOKEN")
+bot.run(TOKEN)

@@ -18,6 +18,14 @@ class Encouragement(Base):
 
     phrase=Column(String, primary_key=True)
 
+class Suggestion(Base):
+    __tablename__='suggestions'
+
+    def __init__(self, phrase):
+        self.phrase = phrase
+    
+    phrase=Column(String, primary_key=True)
+
 # Creating Schema
 Base.metadata.create_all(engine)
 
