@@ -1,4 +1,5 @@
 import discord, requests, json, random, os
+import db
 
 from discord.ext import commands
 from datetime import datetime, timedelta
@@ -88,17 +89,34 @@ async def encouragements(ctx, *args):
         for index in range(1, len(args)):
             # args=["hi", "hello"]
             phraseToAdd=args[index]
-            add_phrase(db.Encouragement, phraseToAdd)
+            db.add(db.Encouragement(phrase=phraseToAdd))
             await ctx.send('"{added}"\thas been added to the list of encouragements'.format(added=phraseToAdd))
+    
     elif option == "show":
         # 'show' lists custom encouragements from db in format
         #   1. encouragement1
         #   2. encouragement2
-        await ctx.send(makeList('List of Encouragements', get_phrases(db.Encouragement)))
+        encouragements = []
+        for encouragementObjects in db.get_all(db.Encouragement):
+            encouragements.append(encouragementObjects.phrase)
+        await ctx.send(makeList('List of Encouragements', encouragements))
 
     elif option == "delete":
         # user deletes phrase(s) from db based on index numbers from 'show'
-        delete_phrases(db.Encouragement, indexesToBeDeleted = args[1:])
+
+        # get all encouragements from DB
+        encouragements = [] 
+        for encouragementObjects in db.get_all(db.Encouragement):
+            encouragements.append(encouragementObjects.phrase)
+
+        # Delete encouragements from the database 
+        # using indexes that user specified 
+        # args[1:] = list of all indexes to be deleted
+        for index in args[1:]: 
+            # statement is just an SQL query to delete what we want
+            statement = db.Encouragement.__table__.delete().where(db.Encouragement.phrase == encouragements[int(index)-1])
+            db.engine.execute(statement)
+
         await ctx.send("Deleted {indexes} phrase(s) from DB".format(indexes=len(args[1:])))
     
 @bot.command(
@@ -110,16 +128,20 @@ async def encouragements(ctx, *args):
     tree suggest add "<you suggestion here>"
     
     View all suggestions:
-    tree suggest view
+    tree suggest show
     """
 )
 async def suggest(ctx, *args):
     option = args[0]
     if option=='add':
-        # args[1] contains the suggestion
-        add_phrase(db.Suggestion, args[1])
+        # args[1] will contain suggestion
+        item = db.Suggestion(args[1])
+        db.add(item)
         await ctx.send("Thanks for your suggestion {user}!".format(user=ctx.author.mention))
-    elif option=='view':
+    elif option=='show':
+        suggestions = []
+        for suggestionObjects in db.get_all(db.Encouragement):
+            suggestions.append(suggestionObjects.phrase)
         await ctx.send(makeList('Suggestions:', get_phrases(db.Suggestion)))
 
 # FUNCTIONS
