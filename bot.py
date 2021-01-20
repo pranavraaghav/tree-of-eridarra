@@ -19,7 +19,14 @@ async def on_ready():
 async def on_message(message):
     # Checking for negative phrases
     if(any(word in message.content.lower().split() for word in negative_phrases)):
-        encouragement = random.choice(list_of_encouragements+get_phrases(db.Encouragement))
+        # Fetching enouragements from DB
+        db_encouragements = []
+        for encouragementObjects in db.get_all(db.Encouragement):
+            encouragements.append(encouragementObjects.phrase)
+
+        # Adding pre-written enouragements to enouragements from DB
+        # then choosing one at random
+        encouragement = random.choice(list_of_encouragements+db_encouragements)
         await message.channel.send(content=encouragement)
 
     # # Checking if user in working
@@ -142,7 +149,7 @@ async def suggest(ctx, *args):
         suggestions = []
         for suggestionObjects in db.get_all(db.Encouragement):
             suggestions.append(suggestionObjects.phrase)
-        await ctx.send(makeList('Suggestions:', get_phrases(db.Suggestion)))
+        await ctx.send(makeList('Suggestions:', suggestions))
 
 # FUNCTIONS
 def printit():

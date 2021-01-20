@@ -55,26 +55,6 @@ def formatTimeDelta(delta):
         pass
         # Seconds tends to break at times, I do not understand why
     return times
-
-# Adds a phrase to corresponding table in DB
-def add_phrase(tableClass, phraseToAdd):
-    item = tableClass(phrase=phraseToAdd)
-    db.add(item)
-
-def get_phrases(tableClass):
-    instances = db.get_all(tableClass)
-    returnList = []
-    for instance in instances:
-        returnList.append(instance.phrase)
-    return returnList
-
-# Takes a list of phrases
-# Removes each phrase from corresponding table in DB
-def delete_phrases(tableClass, indexesToBeDeleted):
-    db_phrases = get_phrases(tableClass)
-    for index in indexesToBeDeleted:
-        statement = tableClass.__table__.delete().where(tableClass.phrase == db_phrases[int(index)-1])
-        db.engine.execute(statement)
     
 # Adding user to working list
 def add_working(user, time):
