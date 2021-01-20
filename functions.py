@@ -1,11 +1,13 @@
-import requests
-import json
-import random
 import db
 from datetime import datetime, timedelta
 
 # Word lists
-negative_phrases = ['sad', 'upset', 'depressed', 'depression']
+negative_phrases = [
+    'sad', 
+    'upset', 
+    'depressed', 
+    'depression'
+]
 
 list_of_encouragements = [
     'Hang in there, champ!', 
@@ -37,8 +39,6 @@ work_phrases_whitelist = [
 working_users = {}
 working_users_hardcore = {}
 
-
-
 # Input should be of type - timdelta
 def formatTimeDelta(delta):
     times = {}
@@ -55,17 +55,6 @@ def formatTimeDelta(delta):
         pass
         # Seconds tends to break at times, I do not understand why
     return times
-
-def get_quote():
-    response = requests.get('https://zenquotes.io/api/random')
-    jsonData = json.loads(response.text)
-    quote = jsonData[0]['q']
-    return quote
-
-def get_advice():
-    response = requests.get('https://api.adviceslip.com/advice')
-    jsonData = json.loads(response.text)
-    return jsonData['slip']['advice']
 
 # Adds a phrase to corresponding table in DB
 def add_phrase(tableClass, phraseToAdd):
@@ -150,9 +139,9 @@ def show_working():
         return text
     return "No one is currently working"
 
-def makeList(listOf, list):
+def makeList(title, list):
     # Provide the title of the list in   listOf
-    text = '__**List of {listOf}**__'.format(listOf=listOf)
+    text = '__**{title}**__'.format(title=title)
     if not list :
         # TODO : replace with better message if req
         return text + "\nNo entries exist!"

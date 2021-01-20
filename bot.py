@@ -1,7 +1,6 @@
-import discord
+import discord, requests, json, random, os
+
 from discord.ext import commands
-import random
-import os
 from datetime import datetime, timedelta
 from functions import *
 
@@ -10,7 +9,7 @@ load_dotenv()
 
 bot = commands.Bot(command_prefix="tree ")
 
-# EVENTS
+# BOT EVENTS
 @bot.event
 async def on_ready():
     print('The Tree of Eridarra is now live, rejoice!\n')
@@ -32,7 +31,7 @@ async def on_message(message):
     
     await bot.process_commands(message)
 
-# COMMANDS
+# BOT COMMANDS
 @bot.command(
     brief="say hi!"
 )
@@ -44,7 +43,10 @@ async def hi(ctx):
     brief='get an inspiration'
 )
 async def inspire(ctx):
-    await ctx.send(get_quote())
+    response = requests.get('https://zenquotes.io/api/random')
+    jsonData = json.loads(response.text)
+    inspiration = jsonData[0]['q']
+    await ctx.send(inspiration)
 
 @bot.command(
     brief='bless another user',
@@ -62,7 +64,10 @@ async def bless(ctx, *args):
     brief="get some advice"
 )
 async def advice(ctx):
-    await ctx.send(get_advice())
+    response = requests.get('https://api.adviceslip.com/advice')
+    jsonData = json.loads(response.text)
+    advice = jsonData['slip']['advice']
+    await ctx.send(advice)
 
 @bot.command(
     name='encouragements',
@@ -89,7 +94,7 @@ async def encouragements(ctx, *args):
         # 'show' lists custom encouragements from db in format
         #   1. encouragement1
         #   2. encouragement2
-        await ctx.send(makeList('Encouragements', get_phrases(db.Encouragement)))
+        await ctx.send(makeList('List of Encouragements', get_phrases(db.Encouragement)))
 
     elif option == "delete":
         # user deletes phrase(s) from db based on index numbers from 'show'
@@ -115,7 +120,7 @@ async def suggest(ctx, *args):
         add_phrase(db.Suggestion, args[1])
         await ctx.send("Thanks for your suggestion {user}!".format(user=ctx.author.mention))
     elif option=='view':
-        await ctx.send(makeList('Suggestions', get_phrases(db.Suggestion)))
+        await ctx.send(makeList('Suggestions:', get_phrases(db.Suggestion)))
 
 # FUNCTIONS
 def printit():
