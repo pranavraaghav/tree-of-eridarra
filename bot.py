@@ -147,7 +147,7 @@ async def suggest(ctx, *args):
         await ctx.send("Thanks for your suggestion {user}!".format(user=ctx.author.mention))
     elif option=='show':
         suggestions = []
-        for suggestionObjects in db.get_all(db.Encouragement):
+        for suggestionObjects in db.get_all(db.Suggestion):
             suggestions.append(suggestionObjects.phrase)
         await ctx.send(makeList('Suggestions:', suggestions))
 
