@@ -1,5 +1,5 @@
 # Tree of Eridarra
-Tree of Eridarra is a discord bot that I custom built for my private discord server - Eridarra.
+A discord bot that cheers you up when you're down, and helps you get work done accountably.
 
 ## Features:
 1. Inspiring and motivating quotes upon command
@@ -19,7 +19,7 @@ Clone the code to your own repl.it, then create a .env file. In the .env file, a
 
 **It should look something like this**:
 TOKEN= JfnDFKShFEHASFHDhSD.fdafLUhdshfds
-(I mashed my keys to get that value, don't bother trying to use that^)
+(I mashed my keyboard to get that value, don't bother trying to use that^)
 
 Run main.py and boom, you should have a working bot. 
 
